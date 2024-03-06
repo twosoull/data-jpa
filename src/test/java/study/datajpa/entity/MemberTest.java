@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.repository.MemberJpaRepository;
+import study.datajpa.repository.MemberRepository;
 
 import java.util.List;
 
@@ -24,6 +25,9 @@ class MemberTest {
 
     @Autowired
     MemberJpaRepository memberJpaRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     public void testEntity(){
@@ -71,5 +75,18 @@ class MemberTest {
         Assertions.assertThat(result.size()).isEqualTo(1);
 
     }
+
+    @Test
+    public void jpaEventBaseEntity() throws Exception {
+        Member member = new Member("member1" , 109);
+        memberRepository.save(member); //@PrePersist 발생
+
+
+        em.flush();// @PreUpdate
+        em.clear();
+
+    }
+
+
 
 }
